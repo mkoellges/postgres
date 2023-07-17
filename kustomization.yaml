@@ -1,0 +1,4 @@
+namespace: my-vendor
+
+resources:
+- postgres.yaml
