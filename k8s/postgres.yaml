@@ -11,8 +11,7 @@ spec:
         parameters:
           max_connections: 50
         pg_hba:
-          - "hostnossl hrc_stage_1 all all trust"
-          - "hostnossl hrc_billing all all trust"
+          - "hostnossl all all all md5"
           - "hostssl all all all md5"
   users:
   - name: flyway-admin
