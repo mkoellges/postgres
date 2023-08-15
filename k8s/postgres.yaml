@@ -4,8 +4,21 @@ metadata:
   name: manni
   namespace: databases
 spec:
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.2-0
   postgresVersion: 15
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        parameters:
+          max_connections: 50
+        pg_hba:
+          - "hostnossl hrc_stage_1 all all trust"
+          - "hostnossl hrc_billing all all trust"
+          - "hostssl all all all md5"
+  users:
+  - name: flyway-admin
+    options: SUPERUSER
+    password:
+      type: ASCII
   instances:
     - name: db01
       replicas: 3
@@ -23,7 +36,6 @@ spec:
               weight: 1
   userInterface:
     pgAdmin:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-4.30-13
       dataVolumeClaimSpec:
         accessModes:
         - "ReadWriteOnce"
@@ -32,13 +44,26 @@ spec:
             storage: 1Gi
   monitoring:
     pgmonitor:
-      exporter:
-        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:latest
   backups:
     pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.41-4
+      manual:
+        repoName: repo1
+        options:
+          - --type=full
+      global:
+        repo1-retention-full: '7'
+        repo1-retention-diff: '48'
+        repo1-retention-full-type: count
+        repo1-s3-uri-style: path
+        repo1-path: /pgbackrest
+        repo1-bundle: "y"
+        repo1-bundle-limit: 10MiB
+        repo1-bundle-size: 100MiB
       repos:
       - name: repo1
+        schedules:
+          full: "0 1 * * 0"
+          differential: "0 1 * * 1-6"
         volume:
           volumeClaimSpec:
             accessModes:
