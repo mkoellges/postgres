@@ -1,5 +1,5 @@
 namespace: databases
 
 resources:
-- namespaces.yaml
+- namespace.yaml
 - postgres.yaml
