@@ -9,8 +9,8 @@ spec:
         repoName: repo1
         options:
         - --type=time
-        - --target="2023-09-01 14:45:00+00"
-  postgresVersion: 14
+        - --target="2023-09-01 17:00:00+00"
+  postgresVersion: 15
   patroni:
     dynamicConfiguration:
       postgresql:
