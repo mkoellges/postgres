@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  async.conf: |
+    [global]
+    archive-async = y
+    spool-path=/pgdata/pgbackrest/spool
+
+    [global:archive-get]
+    process-max = 2
+
+    [global:archive-push]
+    process-max = 2
+kind: ConfigMap
+metadata:
+  name: pgbackrest-async-config

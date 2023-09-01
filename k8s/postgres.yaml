@@ -1,8 +1,7 @@
 apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
-  name: manni
-  namespace: databases
+  name: test
 spec:
   postgresVersion: 15
   patroni:
@@ -14,7 +13,11 @@ spec:
           - "hostnossl all all all md5"
           - "hostssl all all all md5"
   users:
-  - name: flyway-admin
+  - name: flywayadmin
+    options: SUPERUSER
+    password:
+      type: ASCII
+  - name: admin
     options: SUPERUSER
     password:
       type: ASCII
@@ -41,25 +44,15 @@ spec:
         resources:
           requests:
             storage: 1Gi
-  monitoring:
-    pgmonitor:
-      exporter:
-        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.3.1-0
   backups:
     pgbackrest:
       manual:
         repoName: repo1
         options:
           - --type=full
-      global:
-        repo1-retention-full: '7'
-        repo1-retention-diff: '48'
-        repo1-retention-full-type: count
-        repo1-s3-uri-style: path
-        repo1-path: /pgbackrest
-        repo1-bundle: "y"
-        repo1-bundle-limit: 10MiB
-        repo1-bundle-size: 100MiB
+      configuration:
+        - configMap:
+            name: pgbackrest-async-config
       repos:
       - name: repo1
         schedules:
@@ -74,7 +67,6 @@ spec:
                 storage: 10Gi
   proxy:
     pgBouncer:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.18-0
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
