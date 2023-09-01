@@ -21,6 +21,11 @@ spec:
     options: SUPERUSER
     password:
       type: ASCII
+    databases:
+        - test-db
+  databaseInitSQL:
+    name: init-postgresql
+    key: create-db-test-db
   instances:
     - name: db01
       replicas: 3

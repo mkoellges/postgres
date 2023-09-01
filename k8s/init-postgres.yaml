@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: init-postgresql
+data:
+  create-db-test-db: "CREATE DATABASE test-db;"
