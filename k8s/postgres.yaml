@@ -1,63 +1,49 @@
 apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
-  name: test
+  name: hippo
 spec:
-  postgresVersion: 15
-  patroni:
-    dynamicConfiguration:
-      postgresql:
-        parameters:
-          max_connections: 50
-        pg_hba:
-          - "hostnossl all all all md5"
-          - "hostssl all all all md5"
-  users:
-  - name: flywayadmin
-    options: SUPERUSER
-    password:
-      type: ASCII
-  - name: admin
-    options: SUPERUSER
-    password:
-      type: ASCII
-    databases:
-        - test-db
-  databaseInitSQL:
-    name: init-postgresql
-    key: create-db-test-db
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.5-1
+  postgresVersion: 14
   instances:
-    - name: db01
+    - name: instance1
       replicas: 3
+      resources:
+        limits:
+          cpu: 1.0
+          memory: 1Gi
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  postgres-operator.crunchydata.com/cluster: hippo-ha
+                  postgres-operator.crunchydata.com/instance-set: pgha1
       dataVolumeClaimSpec:
         accessModes:
         - "ReadWriteOnce"
         resources:
           requests:
             storage: 1Gi
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-              weight: 1
-  userInterface:
-    pgAdmin:
-      dataVolumeClaimSpec:
-        accessModes:
-          - 'ReadWriteOnce'
-        resources:
-          requests:
-            storage: 1Gi
+  users:
+    - name: manni
+      options: SUPERUSER
+      password:
+        type: ASCII
+    - name: postgres
   backups:
     pgbackrest:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.40-1
+      global:
+        repo1-retention-full: "14"
+        repo1-retention-full-type: time
       manual:
         repoName: repo1
         options:
           - --type=full
-      configuration:
-        - configMap:
-            name: pgbackrest-async-config
       repos:
       - name: repo1
         schedules:
@@ -70,11 +56,44 @@ spec:
             resources:
               requests:
                 storage: 10Gi
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        parameters:
+          max_parallel_workers: 2
+          max_worker_processes: 2
+          shared_buffers: 1GB
+          work_mem: 2MB
+  monitoring:
+    pgmonitor:
+      exporter:
+        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.2.0-0
   proxy:
     pgBouncer:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.17-1
+      replicas: 2
+      config:
+        global:
+          pool_mode: transaction
+      resources:
+        limits:
+          cpu: 200m
+          memory: 128Mi
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-              weight: 1
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+      tolerations:
+        - effect: NoSchedule
+          key: role
+          operator: Equal
+          value: connection-poolers
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              postgres-operator.crunchydata.com/role: pgbouncer
