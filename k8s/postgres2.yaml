@@ -7,9 +7,9 @@ spec:
       postgresCluster:
         clusterName: test
         repoName: repo1
-        options:
-        - --type=time
-        - --target="2023-09-01 17:00:00+00"
+#         options:
+#         - --type=time
+#         - --target="2023-09-01 17:00:00+00"
   postgresVersion: 15
   patroni:
     dynamicConfiguration:
@@ -19,6 +19,8 @@ spec:
         pg_hba:
           - "hostnossl all all all all"
           - "hostssl all all all all"
+          - "host replication _crunchyrepl all md5"
+          - "hostssl replication _crunchyrepl all md5"
   instances:
     - name: db01
       replicas: 3
