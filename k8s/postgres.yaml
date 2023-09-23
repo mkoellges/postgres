@@ -39,7 +39,11 @@ spec:
       options: SUPERUSER
       password:
         type: ASCII
+      databases: 
+        - test
     - name: postgres
+      password:
+        type: ASCII
   backups:
     pgbackrest:
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.40-1
