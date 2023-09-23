@@ -36,6 +36,13 @@ kubectl annotate -n databases postgrescluster hippo \
   postgres-operator.crunchydata.com/pgbackrest-backup="$( date '+%F_%H:%M:%S' )"
 ```
 
+If you need to rerun the backup at the same day, you need to use the `--overwrite` option
+
+```bash
+kubectl annotate -n databases postgrescluster hippo --overwrite \
+  postgres-operator.crunchydata.com/pgbackrest-backup="$( date '+%F_%H:%M:%S' )"
+```
+
 Check the backups:
 
 ```bash
