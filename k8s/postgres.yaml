@@ -28,6 +28,13 @@ spec:
         resources:
           requests:
             storage: 1Gi
+      walVolumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 1Gi
+
   users:
     - name: manni
       options: SUPERUSER
