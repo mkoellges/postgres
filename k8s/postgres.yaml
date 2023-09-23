@@ -70,36 +70,17 @@ spec:
           max_worker_processes: 2
           shared_buffers: 1GB
           work_mem: 2MB
-  monitoring:
-    pgmonitor:
-      exporter:
-        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.2.0-0
   proxy:
     pgBouncer:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.17-1
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-0
       replicas: 2
-      config:
-        global:
-          pool_mode: transaction
-      resources:
-        limits:
-          cpu: 200m
-          memory: 128Mi
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-      tolerations:
-        - effect: NoSchedule
-          key: role
-          operator: Equal
-          value: connection-poolers
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: ScheduleAnyway
-          labelSelector:
-            matchLabels:
-              postgres-operator.crunchydata.com/role: pgbouncer
+            - weight: 1
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+  monitoring:
+    pgmonitor:
+      exporter:
+        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.0.0-0
