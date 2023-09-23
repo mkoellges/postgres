@@ -8,7 +8,7 @@ After installing the [Crunchy Postgres Operator](https://github.com/mkoellges/po
 kubectl apply -k k8s
 ```
 
-The Deployment is created via kustomize in a new created namespace `databases` and a 3 instance cluster `test` is created incl Backup to Disk.
+The Deployment is created via kustomize in a new created namespace `databases` and a 3 instance cluster `hippo` is created incl Backup to Disk.
 
 ## Create a small table for testing
 
@@ -29,12 +29,15 @@ values
 
 ## Create a backup of the DB
 
-Backups are created only on the repo host:
+Backups can be done on demand:
 
-```sh
-kubectl exec -it test-repo-host-0 -- bash
+```bash
+kubectl annotate -n databases postgrescluster hippo \
+  postgres-operator.crunchydata.com/pgbackrest-backup="$( date '+%F_%H:%M:%S' )"
+```
 
-pgbackrest backup --type=full --stanza=db
+Check the backups:
 
-pgbackrest info
+```bash
+kubectl exec -it hippo-repo-host-0 -- pgbackrest info
 ```
