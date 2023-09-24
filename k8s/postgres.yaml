@@ -42,6 +42,7 @@ spec:
       databases: 
         - test
     - name: postgres
+      options: SUPERUSER
       password:
         type: ASCII
   backups:
@@ -88,12 +89,3 @@ spec:
     pgmonitor:
       exporter:
         image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.0.0-0
-  userInterface:
-    pgAdmin:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-4.30-17
-      dataVolumeClaimSpec:
-        accessModes:
-          - 'ReadWriteOnce'
-        resources:
-          requests:
-            storage: 1Gi
