@@ -22,6 +22,7 @@ Here create the monitoring user:
 ```sql
 CREATE ROLE ccp_monitoring WITH LOGIN;
 ALTER ROLE ccp_monitoring WITH PASSWORD '[DECODED PASSWORD OF SECRET hippo-monitoring]';
+ALTER ROLE ccp_monitoring WITH SUPERUSER;
 ```
 
 Now install the monitoring for postgres DBs in this namespace:
