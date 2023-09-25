@@ -3,8 +3,11 @@ kind: PostgresCluster
 metadata:
   name: hippo
 spec:
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.5-1
-  postgresVersion: 14
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.4-0
+  postgresVersion: 15
+  databaseInitSQL:
+    name: init-postgresql
+    key: create-db-test-db
   instances:
     - name: instance1
       replicas: 3
@@ -39,18 +42,16 @@ spec:
       options: SUPERUSER
       password:
         type: ASCII
-      databases: 
-        - test
     - name: postgres
       options: SUPERUSER
       password:
         type: ASCII
   backups:
     pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.40-1
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.47-0
       global:
-        repo1-retention-full: "14"
-        repo1-retention-full-type: time
+        repo1-retention-full: "3"
+        repo1-retention-full-type: count
       manual:
         repoName: repo1
         options:
@@ -79,6 +80,11 @@ spec:
     pgBouncer:
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-0
       replicas: 2
+      config:
+        global:
+          max_client_conn: "100"
+          default_pool_size: "100"
+          max_db_connections: "100"
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
