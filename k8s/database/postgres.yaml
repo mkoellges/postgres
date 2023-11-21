@@ -3,7 +3,6 @@ kind: PostgresCluster
 metadata:
   name: hippo
 spec:
-#  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.4-0
   postgresVersion: 14
   databaseInitSQL:
     name: init-postgresql
@@ -48,7 +47,9 @@ spec:
         type: ASCII
   backups:
     pgbackrest:
-#      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.47-0
+      configuration:
+        - secret:
+            name: postgres-db-s3-credentials
       global:
         repo1-retention-full: "3"
         repo1-retention-full-type: count
@@ -61,13 +62,17 @@ spec:
         schedules:
           full: "0 1 * * 0"
           differential: "0 1 * * 1-6"
-        volume:
-          volumeClaimSpec:
-            accessModes:
-            - "ReadWriteOnce"
-            resources:
-              requests:
-                storage: 10Gi
+        # volume:
+        #   volumeClaimSpec:
+        #     accessModes:
+        #     - "ReadWriteOnce"
+        #     resources:
+        #       requests:
+        #         storage: 10Gi
+        s3:
+            bucket: postgres
+            endpoint: httphttp://minio.minio.svc:9000
+            region: eu-01
   patroni:
     dynamicConfiguration:
       postgresql:
@@ -78,7 +83,6 @@ spec:
           work_mem: 2MB
   proxy:
     pgBouncer:
-#      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-0
       replicas: 2
       config:
         global:
