@@ -71,7 +71,7 @@ spec:
         #         storage: 10Gi
         s3:
             bucket: postgres
-            endpoint: httphttp://minio.minio.svc:9000
+            endpoint: http://minio.minio.svc:9000
             region: eu-01
   patroni:
     dynamicConfiguration:
