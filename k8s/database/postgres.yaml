@@ -73,7 +73,7 @@ spec:
         #         storage: 10Gi
         s3:
           bucket: postgres
-          endpoint: "https://minio.minio.svc:9000"
+          endpoint: "https://minio-api.koellgma.de"
           region: eu-01
   patroni:
     dynamicConfiguration:
