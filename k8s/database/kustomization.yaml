@@ -1,7 +1,7 @@
 namespace: databases
 
 resources:
-  - namespace.yaml
+#  - namespace.yaml
   - init-postgres.yaml
   - cm-pgbackrestconfig.yaml
   - postgres.yaml

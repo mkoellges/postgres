@@ -47,16 +47,18 @@ spec:
         type: ASCII
   backups:
     pgbackrest:
-      configuration:
-        - secret:
-            name: postgres-db-s3-credentials
-      global:
-        repo1-retention-full: "3"
-        repo1-retention-full-type: count
       manual:
         repoName: repo1
         options:
           - --type=full
+      configuration:
+        - secret:
+            name: postgres-db-s3-credentials
+        - configMap:
+            name: pgbackrest-async-config
+      global:
+        repo1-retention-full: "3"
+        repo1-retention-full-type: count
       repos:
       - name: repo1
         schedules:
@@ -70,9 +72,9 @@ spec:
         #       requests:
         #         storage: 10Gi
         s3:
-            bucket: postgres
-            endpoint: http://minio.minio.svc:9000
-            region: eu-01
+          bucket: postgres
+          endpoint: "http://minio.minio.svc:9000"
+          region: eu-01
   patroni:
     dynamicConfiguration:
       postgresql:
