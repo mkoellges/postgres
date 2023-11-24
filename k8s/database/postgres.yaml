@@ -47,8 +47,6 @@ spec:
         type: ASCII
   backups:
     pgbackrest:
-      # image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.47-2
-      image: woblerr/pgbackrest:2.39
       manual:
         repoName: repo1
         options:
@@ -62,18 +60,12 @@ spec:
         repo1-retention-full: "3"
         repo1-retention-full-type: count
         repo1-storage-verify-tls: "n"
+        repo1-s3-uri-style: path
       repos:
       - name: repo1
         schedules:
           full: "0 1 * * 0"
           differential: "0 1 * * 1-6"
-        # volume:
-        #   volumeClaimSpec:
-        #     accessModes:
-        #     - "ReadWriteOnce"
-        #     resources:
-        #       requests:
-        #         storage: 10Gi
         s3:
           bucket: postgres
           endpoint: "https://minio-api.koellgma.de"
