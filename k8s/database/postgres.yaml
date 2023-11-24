@@ -69,7 +69,7 @@ spec:
         s3:
           bucket: postgres
           endpoint: "https://minio-api.koellgma.de"
-          region: us-east-1
+          region: eu-01
   patroni:
     dynamicConfiguration:
       postgresql:
