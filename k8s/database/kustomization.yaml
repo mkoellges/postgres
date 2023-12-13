@@ -1,7 +1,8 @@
 namespace: databases
 
 resources:
-#  - namespace.yaml
+  - namespace.yaml
+  - postgres-secret-s3-credentials.yaml
   - init-postgres.yaml
   - cm-pgbackrestconfig.yaml
   - postgres.yaml
