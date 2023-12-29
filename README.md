@@ -17,6 +17,7 @@ kubectl exec -it hippo-instance1-45mt-0 -- patronictl list
 
 kubectl exec -it [MASTER_INSTANCE] -- psql
 ```
+
 Here create the monitoring user:
 
 ```sql
