@@ -3,7 +3,8 @@ kind: PostgresCluster
 metadata:
   name: hippo
 spec:
-  postgresVersion: 14
+  shutdown: false
+  postgresVersion: 15
   databaseInitSQL:
     name: init-postgresql
     key: create-db-test-db

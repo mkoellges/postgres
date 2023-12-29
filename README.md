@@ -69,3 +69,44 @@ Check the backups:
 ```bash
 kubectl exec -it hippo-repo-host-0 -- pgbackrest info
 ```
+
+## Upgrade postgres to higher version
+
+Create a  `PG_UPDATE_DEPLOYMENT_NAME` yaml manifest `pg_update.yaml` and apply it in the same namespace where the database is running:
+
+```yaml
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PGUpgrade
+metadata:
+  name: [PG_UPDATE_DEPLOYMENT_NAME]
+spec:
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi8-5.5.0-0
+  postgresClusterName: [PG_CLUSTER_NAME]
+  fromPostgresVersion: [FRON_VERSION]
+  toPostgresVersion: [TO_VERSION]
+```
+
+After this manifest is deployed you can check with
+
+```bash
+kubectl -n [NAMESPACE] get pgupgrades
+```
+
+Now annotate the instance to fulfil the update
+
+```bash
+kubectl -n pgo annotate postgrescluster [POSTGRES_CLUISTER_NAME] postgres-operator.crunchydata.com/allow-upgrade="[PG_UPDATE_DEPLOYMENT_NAME]
+```
+
+Now shutdown the database by changing the notation for `shutdown` in the postgres-cluster yaml manifest
+
+```yaml
+...
+  spec:
+    shutdown: true
+...
+```
+
+Now the instance will be shutted down and the database will be upgraded. For this a couple of jobs run - you see completed pods at the end.
+
+Now update the version in your postgres cluster manifest to the desired version and set `spec.shutdown` to `false` again so that the instance starts again.
