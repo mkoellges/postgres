@@ -68,7 +68,7 @@ spec:
           differential: "0 1 * * 1-6"
         s3:
           bucket: postgres
-          endpoint: "https://s3-api.koellgma.de"
+          endpoint: "https://minio-api.koellgma.de"
           region: eu-01
   patroni:
     dynamicConfiguration:
