@@ -68,7 +68,7 @@ kubectl annotate -n databases postgrescluster hippo --overwrite \
 Check the backups:
 
 ```bash
-kubectl exec -it hippo-repo-host-0 -- pgbackrest info
+kubectl exec -it [LEADER_INSTANCE_POD] -- pgbackrest info
 ```
 
 ## Upgrade postgres to higher version

@@ -4,6 +4,7 @@ metadata:
   name: hippo
 spec:
   shutdown: false
+  standby: false
   postgresVersion: 15
   databaseInitSQL:
     name: init-postgresql
