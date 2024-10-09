@@ -68,10 +68,13 @@ spec:
         schedules:
           full: "0 1 * * 0"
           differential: "0 1 * * 1-6"
-        s3:
-          bucket: postgres
-          endpoint: "https://minio-api.koellgma.de"
-          region: eu-01
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 10Gi
   patroni:
     dynamicConfiguration:
       postgresql:
