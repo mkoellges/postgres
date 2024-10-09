@@ -63,8 +63,6 @@ spec:
       global:
         repo1-retention-full: "3"
         repo1-retention-full-type: count
-        repo1-storage-verify-tls: "n"
-        repo1-s3-uri-style: path
       repos:
       - name: repo1
         schedules:
