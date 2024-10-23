@@ -13,6 +13,7 @@ spec:
     key: create-db-test-db
   instances:
     - name: instance1
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.8-2
       replicas: 2
       resources:
         limits:
