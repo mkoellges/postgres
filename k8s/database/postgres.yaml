@@ -70,7 +70,7 @@ spec:
             full: "0 1 * * 0"
             differential: "0 1 * * 1-6"
           s3:
-            bucket: cluster-01
+            bucket: postgres
             endpoint: https://minio.minio.svc.cluster.local:9000
             region: eu-01
   patroni:
