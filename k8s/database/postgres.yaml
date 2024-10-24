@@ -65,17 +65,14 @@ spec:
         repo1-retention-full: "3"
         repo1-retention-full-type: count
       repos:
-      - name: repo1
-        schedules:
-          full: "0 1 * * 0"
-          differential: "0 1 * * 1-6"
-        volume:
-          volumeClaimSpec:
-            accessModes:
-            - "ReadWriteOnce"
-            resources:
-              requests:
-                storage: 10Gi
+        - name: repo1
+          schedules:
+            full: "0 1 * * 0"
+            differential: "0 1 * * 1-6"
+          s3:
+            bucket: cluster-01
+            endpoint: https://minio.minio.svc.cluster.local:9000
+            region: eu-01
   patroni:
     dynamicConfiguration:
       postgresql:
