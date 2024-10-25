@@ -62,7 +62,7 @@ spec:
         - configMap:
             name: pgbackrest-async-config
       global:
-        repo1-retention-full: "3"
+        repo1-retention-full: "1"
         repo1-retention-full-type: count
       repos:
         - name: repo1
