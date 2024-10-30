@@ -18,7 +18,7 @@ spec:
       resources:
         limits:
           cpu: 1.0
-          memory: 1Gi
+          memory: 2Gi
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -76,6 +76,9 @@ spec:
             region: eu-01
   patroni:
     dynamicConfiguration:
+      ttl: 30
+      loop_wait: 10
+      retry_timeout: 10
       postgresql:
         parameters:
           max_parallel_workers: 2
