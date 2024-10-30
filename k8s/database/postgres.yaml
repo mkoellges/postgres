@@ -81,6 +81,7 @@ spec:
       retry_timeout: 10
       postgresql:
         parameters:
+          log_min_messages: debug1
           max_parallel_workers: 2
           max_worker_processes: 2
           shared_buffers: 1GB
