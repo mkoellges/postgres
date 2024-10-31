@@ -8,7 +8,7 @@ spec:
     enabled: false
     repoName: repo1
   postgresVersion: 15
-#  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.8-0  # Specify the exact image with version 15.8
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.8-0  # Specify the exact image with version 15.8
   databaseInitSQL:
     name: init-postgresql
     key: create-db-test-db
@@ -52,6 +52,7 @@ spec:
         type: ASCII
   backups:
     pgbackrest:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.52.1-1
       manual:
         repoName: repo1
         options:
