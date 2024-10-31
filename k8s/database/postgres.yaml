@@ -62,14 +62,19 @@ spec:
         - configMap:
             name: pgbackrest-async-config
       global:
-        repo1-retention-full: "1"
+        repo1-retention-full: '2'
         repo1-retention-full-type: count
-        repo1-s3-verify-tls: "n"
+        repo1-s3-uri-style: path
+        repo1-path: /pgbackrest
+        repo1-bundle: "y"
+        repo1-bundle-limit: 10MiB
+        repo1-bundle-size: 100MiB
+        repo1-storage-verify-tls: "n"
+
       repos:
         - name: repo1
           schedules:
             full: "0 1 * * 0"
-            differential: "0 1 * * 1-6"
           s3:
             bucket: postgres
             endpoint: https://minio.minio.svc.cluster.local:9000
