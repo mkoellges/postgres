@@ -12,6 +12,10 @@ spec:
   databaseInitSQL:
     name: init-postgresql
     key: create-db-test-db
+  monitoring:
+    pgmonitor:
+      exporter:
+        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.3.1-0
   instances:
     - name: instance1
       replicas: 2
@@ -108,7 +112,3 @@ spec:
             - weight: 1
               podAffinityTerm:
                 topologyKey: kubernetes.io/hostname
-  monitoring:
-    pgmonitor:
-      exporter:
-        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.0.0-0
